@@ -1,5 +1,4 @@
 from queue import Queue
-
 class Puzzle:
     def __init__(self, state):
         self.state = state
