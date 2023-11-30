@@ -1,32 +1,34 @@
 from itertools import permutations
 
-def calculate_total_distance(order, graph):
+def calculate_distance(tour, distances):
     total_distance = 0
-    for i in range(len(order) - 1):
-        total_distance += graph[order[i]][order[i + 1]]
-    total_distance += graph[order[-1]][order[0]]  
+    for i in range(len(tour) - 1):
+        total_distance += distances[tour[i]][tour[i + 1]]
+    total_distance += distances[tour[-1]][tour[0]]
     return total_distance
 
-def traveling_salesman_bruteforce(graph):
-    nodes = list(graph.keys())
-    best_order = None
-    best_distance = float('inf')
+def traveling_salesman_bruteforce(distances):
+    num_cities = len(distances)
+    cities = list(range(num_cities))
+    min_distance = float('inf')
+    best_tour = None
 
-    for perm in permutations(nodes):
-        current_distance = calculate_total_distance(perm, graph)
-        if current_distance < best_distance:
-            best_distance = current_distance
-            best_order = perm
+    for tour in permutations(cities):
+        current_distance = calculate_distance(tour, distances)
+        if current_distance < min_distance:
+            min_distance = current_distance
+            best_tour = tour
 
-    return best_order, best_distance
+    return best_tour, min_distance
 
-graph = {
-    'A': {'B': 2, 'C': 3, 'D': 1},
-    'B': {'A': 2, 'C': 2, 'D': 4},
-    'C': {'A': 3, 'B': 2, 'D': 5},
-    'D': {'A': 1, 'B': 4, 'C': 5}
-}
+distances = [
+    [0, 1, 2, 3],
+    [1, 0, 6, 4],
+    [2, 6, 0, 5],
+    [3, 4, 5, 0]
+]
 
-best_order, best_distance = traveling_salesman_bruteforce(graph)
-print("Best Order->", best_order)
-print("Best Distance:", best_distance)
+best_tour, min_distance = traveling_salesman_bruteforce(distances)
+
+print("Best Tour:", best_tour)
+print("Minimum Distance:", min_distance)
